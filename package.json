@@ -1,27 +1,53 @@
 {
   "name": "react-effects",
   "version": "0.1.0",
-  "description": "Production-ready React component library for reusable visual effects",
+  "description": "Production-ready React component library for reusable visual effects with Tailwind CSS support",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "react",
+    "react-component",
     "effects",
     "cursor",
     "background",
     "animation",
-    "visual-effects"
+    "visual-effects",
+    "tailwind",
+    "tailwindcss",
+    "typescript",
+    "nextjs",
+    "ssr",
+    "cursor-effects",
+    "background-effects",
+    "ui-effects",
+    "interactive",
+    "particles",
+    "gradient",
+    "mesh",
+    "hexagons"
   ],
+  "author": "Your Name",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/react-effects"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/react-effects/issues"
+  },
+  "homepage": "https://github.com/yourusername/react-effects#readme",
   "peerDependencies": {
     "react": ">=18"
   },

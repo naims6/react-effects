@@ -5,6 +5,7 @@ export interface CursorGlowProps {
   size?: number;
   smoothness?: number;
   container?: HTMLElement | null;
+  className?: string;
 }
 
 export const CursorGlow: React.FC<CursorGlowProps> = ({
@@ -12,6 +13,7 @@ export const CursorGlow: React.FC<CursorGlowProps> = ({
   size = 20,
   smoothness = 0.15,
   container = null,
+  className = "",
 }) => {
   const glowRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
@@ -64,6 +66,7 @@ export const CursorGlow: React.FC<CursorGlowProps> = ({
   return (
     <div
       ref={glowRef}
+      className={className}
       style={{
         position: container ? "absolute" : "fixed",
         top: 0,

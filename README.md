@@ -14,6 +14,7 @@ Production-ready React component library for reusable visual effects. Lightweigh
 - 📍 Flexible positioning (absolute/fixed)
 - 🎚️ Configurable z-index for layering
 - 🎯 Scoped or global cursor effects
+- 🎨 **Tailwind CSS support** - All components support `className` prop
 
 ## Installation
 
@@ -23,7 +24,7 @@ npm install react-effects
 
 ## Quick Start
 
-### Full Page Background + Global Cursor
+### Basic Usage
 
 ```tsx
 import { CursorFollower, BackgroundMesh } from "react-effects";
@@ -39,25 +40,80 @@ function App() {
 }
 ```
 
-### Section-Specific Background
+### With Tailwind CSS
 
 ```tsx
-<section style={{ position: "relative", height: "100vh" }}>
-  <BackgroundGrid position="absolute" zIndex={-1} />
-  <Content />
-</section>
+import { CursorFollower, BackgroundMesh } from "react-effects";
+
+function App() {
+  return (
+    <>
+      <CursorFollower className="mix-blend-difference" />
+      <BackgroundMesh
+        className="opacity-80 dark:opacity-50"
+        position="fixed"
+        zIndex={-1}
+      />
+      <YourContent />
+    </>
+  );
+}
 ```
 
-### Scoped Cursor Effect
+## Tailwind CSS Integration
+
+All 20 components support the `className` prop for seamless Tailwind CSS integration!
+
+### Examples
+
+#### Responsive Visibility
 
 ```tsx
-const ref = useRef<HTMLDivElement>(null);
-
-<div ref={ref} style={{ position: "relative" }}>
-  <CursorGlow container={ref.current} />
-  <Content />
-</div>;
+<CursorFollower className="hidden md:block" />
+<BackgroundMesh className="block md:hidden" position="fixed" />
 ```
+
+#### Dark Mode
+
+```tsx
+<BackgroundGrid
+  className="opacity-50 dark:opacity-30"
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+#### Hover Effects
+
+```tsx
+<div className="group relative">
+  <BackgroundGradient
+    className="opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+    position="absolute"
+    zIndex={-1}
+  />
+  <Content />
+</div>
+```
+
+#### Animations
+
+```tsx
+<CursorGlow className="animate-pulse" />
+<BackgroundParticles className="animate-fade-in" position="fixed" />
+```
+
+#### Blur & Opacity
+
+```tsx
+<BackgroundMesh
+  className="opacity-80 blur-sm"
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+See **TAILWIND_GUIDE.md** for complete Tailwind CSS integration examples.
 
 ## Background Effects (10 Total)
 
@@ -65,11 +121,9 @@ All backgrounds support:
 
 - `position?: "absolute" | "fixed"` - Default: `"absolute"`
 - `zIndex?: number` - Default: `-1`
-- `className?: string`
+- `className?: string` - For Tailwind CSS
 
 ### 1. BackgroundGrid
-
-CSS grid pattern background.
 
 ```tsx
 <BackgroundGrid
@@ -78,12 +132,11 @@ CSS grid pattern background.
   opacity={0.5}
   position="fixed"
   zIndex={-1}
+  className="dark:opacity-30"
 />
 ```
 
 ### 2. BackgroundGradient
-
-Animated gradient background.
 
 ```tsx
 <BackgroundGradient
@@ -92,12 +145,11 @@ Animated gradient background.
   angle={-45}
   position="absolute"
   zIndex={-1}
+  className="opacity-80"
 />
 ```
 
 ### 3. BackgroundParticles
-
-Canvas-based floating particles.
 
 ```tsx
 <BackgroundParticles
@@ -106,12 +158,11 @@ Canvas-based floating particles.
   speed={0.5}
   position="fixed"
   zIndex={-1}
+  className="hidden md:block"
 />
 ```
 
 ### 4. BackgroundStars
-
-Twinkling stars effect.
 
 ```tsx
 <BackgroundStars
@@ -120,12 +171,11 @@ Twinkling stars effect.
   twinkleSpeed={0.02}
   position="fixed"
   zIndex={-1}
+  className="opacity-70"
 />
 ```
 
 ### 5. BackgroundDots
-
-Dot pattern background.
 
 ```tsx
 <BackgroundDots
@@ -135,12 +185,11 @@ Dot pattern background.
   opacity={0.5}
   position="absolute"
   zIndex={-1}
+  className="dark:opacity-20"
 />
 ```
 
 ### 6. BackgroundMatrix
-
-Matrix-style falling characters.
 
 ```tsx
 <BackgroundMatrix
@@ -149,12 +198,11 @@ Matrix-style falling characters.
   speed={50}
   position="fixed"
   zIndex={-1}
+  className="opacity-60"
 />
 ```
 
 ### 7. BackgroundWaves
-
-Animated wave effect.
 
 ```tsx
 <BackgroundWaves
@@ -163,12 +211,11 @@ Animated wave effect.
   waveCount={3}
   position="absolute"
   zIndex={-1}
+  className="blur-sm"
 />
 ```
 
 ### 8. BackgroundRipple
-
-Expanding ripple circles from center.
 
 ```tsx
 <BackgroundRipple
@@ -177,12 +224,11 @@ Expanding ripple circles from center.
   duration={4}
   position="absolute"
   zIndex={-1}
+  className="opacity-50"
 />
 ```
 
 ### 9. BackgroundHexagons ⭐ NEW
-
-Animated hexagonal pattern with pulsing effect.
 
 ```tsx
 <BackgroundHexagons
@@ -191,12 +237,11 @@ Animated hexagonal pattern with pulsing effect.
   animationSpeed={3}
   position="absolute"
   zIndex={-1}
+  className="opacity-60 dark:opacity-40"
 />
 ```
 
 ### 10. BackgroundMesh ⭐ NEW
-
-Smooth animated mesh gradient with flowing colors.
 
 ```tsx
 <BackgroundMesh
@@ -205,6 +250,7 @@ Smooth animated mesh gradient with flowing colors.
   complexity={3}
   position="fixed"
   zIndex={-1}
+  className="opacity-90 dark:opacity-70"
 />
 ```
 
@@ -213,55 +259,61 @@ Smooth animated mesh gradient with flowing colors.
 All cursors support:
 
 - `container?: HTMLElement | null` - Default: `null` (global)
+- `className?: string` - For Tailwind CSS
 
 ### 1. CursorGlow
-
-Smooth glowing circle that follows the cursor.
 
 ```tsx
 <CursorGlow
   color="#00ffff"
   size={20}
   smoothness={0.15}
-  container={null} // Global
+  container={null}
+  className="mix-blend-screen"
 />
 ```
 
 ### 2. CursorTrail
 
-Trailing dots following cursor movement.
-
 ```tsx
-<CursorTrail color="#ff00ff" size={8} trailLength={8} />
+<CursorTrail color="#ff00ff" size={8} trailLength={8} className="opacity-80" />
 ```
 
 ### 3. CursorDotRing
 
-Center dot with lagging outer ring.
-
 ```tsx
-<CursorDotRing dotSize={8} ringSize={32} color="#ffffff" />
+<CursorDotRing
+  dotSize={8}
+  ringSize={32}
+  color="#ffffff"
+  className="mix-blend-difference"
+/>
 ```
 
 ### 4. CursorSpotlight
 
-Large spotlight effect following cursor.
-
 ```tsx
-<CursorSpotlight size={200} color="#ffffff" blur={100} opacity={0.3} />
+<CursorSpotlight
+  size={200}
+  color="#ffffff"
+  blur={100}
+  opacity={0.3}
+  className="hidden lg:block"
+/>
 ```
 
 ### 5. CursorRipple
 
-Ripple effect on click.
-
 ```tsx
-<CursorRipple color="#ff00ff" size={100} duration={800} />
+<CursorRipple
+  color="#ff00ff"
+  size={100}
+  duration={800}
+  className="opacity-70"
+/>
 ```
 
 ### 6. CursorBubble ✅ FIXED
-
-Bubbles appear on mouse movement.
 
 ```tsx
 <CursorBubble
@@ -270,30 +322,34 @@ Bubbles appear on mouse movement.
   maxSize={30}
   lifetime={1000}
   frequency={50}
+  className="opacity-80"
 />
 ```
 
 ### 7. CursorMagnetic
 
-Cursor attracted to magnetic elements.
-
 ```tsx
-<CursorMagnetic size={40} color="#ff6b6b" strength={0.3} />
+<CursorMagnetic
+  size={40}
+  color="#ff6b6b"
+  strength={0.3}
+  className="mix-blend-difference"
+/>
 ```
-
-Add `data-magnetic` attribute to elements to make them magnetic.
 
 ### 8. CursorParticles
 
-Particle trail following cursor.
-
 ```tsx
-<CursorParticles color="#ffff00" particleCount={5} spread={2} lifetime={60} />
+<CursorParticles
+  color="#ffff00"
+  particleCount={5}
+  spread={2}
+  lifetime={60}
+  className="opacity-90"
+/>
 ```
 
 ### 9. CursorFollower ⭐ NEW
-
-Professional dot and circle follower.
 
 ```tsx
 <CursorFollower
@@ -302,15 +358,20 @@ Professional dot and circle follower.
   dotSize={6}
   circleSize={40}
   circleDelay={0.08}
+  className="mix-blend-difference"
 />
 ```
 
 ### 10. CursorNeon ⭐ NEW
 
-Neon glow cursor with screen blend mode.
-
 ```tsx
-<CursorNeon color="#00ffff" size={30} glowIntensity={20} smoothness={0.12} />
+<CursorNeon
+  color="#00ffff"
+  size={30}
+  glowIntensity={20}
+  smoothness={0.12}
+  className="mix-blend-screen"
+/>
 ```
 
 ## Advanced Usage
@@ -320,91 +381,91 @@ Neon glow cursor with screen blend mode.
 #### Fixed Position (Full Page)
 
 ```tsx
-<BackgroundMesh position="fixed" zIndex={-1} />
+<BackgroundMesh position="fixed" zIndex={-1} className="opacity-80" />
 ```
-
-- Covers entire viewport
-- Stays in place when scrolling
-- No parent positioning required
 
 #### Absolute Position (Section-Specific)
 
 ```tsx
-<section style={{ position: "relative", height: "100vh" }}>
-  <BackgroundGrid position="absolute" zIndex={-1} />
+<section className="relative h-screen">
+  <BackgroundGrid
+    position="absolute"
+    zIndex={-1}
+    className="opacity-50 dark:opacity-30"
+  />
   <Content />
 </section>
 ```
-
-- Contained within parent element
-- Requires `position: relative` on parent
-- Different backgrounds per section
 
 ### Container Control for Cursors
 
 #### Global Cursor (Default)
 
 ```tsx
-<CursorFollower />
+<CursorFollower className="hidden md:block" />
 ```
-
-- Works across entire website
-- Follows cursor everywhere
 
 #### Scoped Cursor
 
 ```tsx
 const ref = useRef<HTMLDivElement>(null);
 
-<div ref={ref} style={{ position: "relative" }}>
-  <CursorGlow container={ref.current} />
+<div ref={ref} className="relative">
+  <CursorGlow container={ref.current} className="mix-blend-difference" />
   <Content />
 </div>;
 ```
 
-- Limited to specific section
-- Different cursors per section
-- Requires ref and `position: relative`
+### Tailwind CSS Examples
 
-### Layering Multiple Backgrounds
+#### Responsive Design
 
 ```tsx
-<div style={{ position: "relative", height: "100vh" }}>
-  <BackgroundMesh position="absolute" zIndex={-3} />
-  <BackgroundGrid position="absolute" zIndex={-2} opacity={0.3} />
-  <BackgroundDots position="absolute" zIndex={-1} opacity={0.2} />
+<>
+  {/* Simple on mobile */}
+  <BackgroundGrid className="block md:hidden opacity-30" position="fixed" />
+
+  {/* Complex on desktop */}
+  <BackgroundMesh className="hidden md:block opacity-80" position="fixed" />
+
+  {/* No cursor on mobile */}
+  <CursorFollower className="hidden md:block" />
+</>
+```
+
+#### Dark Mode
+
+```tsx
+<BackgroundGrid
+  className="opacity-50 dark:opacity-30"
+  lineColor="#333"
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+#### Hover Effects
+
+```tsx
+<div className="group relative">
+  <BackgroundGradient
+    className="opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+    position="absolute"
+    zIndex={-1}
+  />
   <Content />
 </div>
 ```
 
-### Different Effects per Section
+#### Layered with Tailwind
 
 ```tsx
-function App() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
-
-  return (
-    <>
-      {/* Hero section */}
-      <section ref={heroRef} style={{ position: "relative", height: "100vh" }}>
-        <CursorNeon container={heroRef.current} />
-        <BackgroundMesh position="absolute" zIndex={-1} />
-        <Hero />
-      </section>
-
-      {/* Gallery section */}
-      <section
-        ref={galleryRef}
-        style={{ position: "relative", height: "100vh" }}
-      >
-        <CursorMagnetic container={galleryRef.current} />
-        <BackgroundHexagons position="absolute" zIndex={-1} />
-        <Gallery />
-      </section>
-    </>
-  );
-}
+<div className="relative h-screen">
+  <BackgroundMesh className="opacity-80 z-[-3]" position="absolute" />
+  <BackgroundGrid className="opacity-30 z-[-2]" position="absolute" />
+  <BackgroundDots className="opacity-20 z-[-1]" position="absolute" />
+  <Content />
+</div>
 ```
 
 ## Tree-shaking
@@ -426,9 +487,13 @@ import { CursorNeon, BackgroundMesh } from "react-effects";
 export default function Page() {
   return (
     <>
-      <CursorNeon />
-      <div style={{ position: "relative", minHeight: "100vh" }}>
-        <BackgroundMesh position="absolute" zIndex={-1} />
+      <CursorNeon className="hidden md:block" />
+      <div className="relative min-h-screen">
+        <BackgroundMesh
+          className="opacity-80 dark:opacity-60"
+          position="absolute"
+          zIndex={-1}
+        />
         <main>Your content</main>
       </div>
     </>
@@ -438,6 +503,8 @@ export default function Page() {
 
 ## Documentation
 
+- **README.md** - This file
+- **TAILWIND_GUIDE.md** - Complete Tailwind CSS integration guide
 - **USAGE_GUIDE.md** - Complete usage examples
 - **POSITION_CONTAINER_GUIDE.md** - Position & container control
 - **FEATURES.md** - All features with examples
