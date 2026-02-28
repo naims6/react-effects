@@ -6,6 +6,7 @@ export interface BackgroundMatrixProps {
   speed?: number;
   density?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -15,6 +16,7 @@ export const BackgroundMatrix: React.FC<BackgroundMatrixProps> = ({
   speed = 50,
   density = 0.95,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -90,7 +92,7 @@ export const BackgroundMatrix: React.FC<BackgroundMatrixProps> = ({
       ref={containerRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

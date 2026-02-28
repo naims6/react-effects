@@ -3,6 +3,7 @@ export interface BackgroundGridProps {
   lineColor?: string;
   opacity?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -11,6 +12,7 @@ export const BackgroundGrid: React.FC<BackgroundGridProps> = ({
   lineColor = "#333333",
   opacity = 0.5,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   if (typeof window === "undefined") return null;
@@ -19,7 +21,7 @@ export const BackgroundGrid: React.FC<BackgroundGridProps> = ({
     <div
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

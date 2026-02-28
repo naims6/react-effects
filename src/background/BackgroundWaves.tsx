@@ -6,6 +6,7 @@ export interface BackgroundWavesProps {
   waveCount?: number;
   speed?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -15,6 +16,7 @@ export const BackgroundWaves: React.FC<BackgroundWavesProps> = ({
   waveCount = 3,
   speed = 5,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -58,7 +60,7 @@ export const BackgroundWaves: React.FC<BackgroundWavesProps> = ({
       ref={divRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

@@ -7,6 +7,7 @@ export interface BackgroundStarsProps {
   minSize?: number;
   maxSize?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -26,6 +27,7 @@ export const BackgroundStars: React.FC<BackgroundStarsProps> = ({
   minSize = 1,
   maxSize = 3,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -106,7 +108,7 @@ export const BackgroundStars: React.FC<BackgroundStarsProps> = ({
       ref={containerRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

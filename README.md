@@ -4,15 +4,16 @@ Production-ready React component library for reusable visual effects. Lightweigh
 
 ## Features
 
-- 🎯 10 Cursor Effects
-- 🌈 10 Background Effects
+- 🎯 10 Cursor Effects with container control
+- 🌈 10 Background Effects with position control
 - 📦 Tree-shakable exports
 - 🔒 TypeScript support
 - ⚡ Lightweight and performant
 - 🚀 Next.js compatible (SSR safe)
 - 🎨 Fully customizable via props
-- 📍 Absolute positioning for flexible placement
+- 📍 Flexible positioning (absolute/fixed)
 - 🎚️ Configurable z-index for layering
+- 🎯 Scoped or global cursor effects
 
 ## Installation
 
@@ -20,291 +21,427 @@ Production-ready React component library for reusable visual effects. Lightweigh
 npm install react-effects
 ```
 
-## Usage
+## Quick Start
 
-### Cursor Effects
+### Full Page Background + Global Cursor
 
 ```tsx
-import { CursorGlow, CursorFollower, CursorNeon } from "react-effects";
+import { CursorFollower, BackgroundMesh } from "react-effects";
 
 function App() {
   return (
     <>
-      <CursorGlow color="#00ffff" size={20} smoothness={0.15} />
-      {/* or */}
-      <CursorFollower dotColor="#fff" circleColor="#00ffff" />
-      {/* or */}
-      <CursorNeon color="#ff00ff" glowIntensity={30} />
+      <CursorFollower />
+      <BackgroundMesh position="fixed" zIndex={-1} />
+      <YourContent />
     </>
   );
 }
 ```
 
-### Background Effects (Absolute Positioning)
-
-All background effects use `position: absolute` with configurable z-index, allowing you to place them anywhere in your layout.
+### Section-Specific Background
 
 ```tsx
-import { BackgroundGrid, BackgroundMesh } from "react-effects";
+<section style={{ position: "relative", height: "100vh" }}>
+  <BackgroundGrid position="absolute" zIndex={-1} />
+  <Content />
+</section>
+```
 
+### Scoped Cursor Effect
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+
+<div ref={ref} style={{ position: "relative" }}>
+  <CursorGlow container={ref.current} />
+  <Content />
+</div>;
+```
+
+## Background Effects (10 Total)
+
+All backgrounds support:
+
+- `position?: "absolute" | "fixed"` - Default: `"absolute"`
+- `zIndex?: number` - Default: `-1`
+- `className?: string`
+
+### 1. BackgroundGrid
+
+CSS grid pattern background.
+
+```tsx
+<BackgroundGrid
+  cellSize={40}
+  lineColor="#333333"
+  opacity={0.5}
+  position="fixed"
+  zIndex={-1}
+/>
+```
+
+### 2. BackgroundGradient
+
+Animated gradient background.
+
+```tsx
+<BackgroundGradient
+  colors={["#667eea", "#764ba2", "#f093fb"]}
+  speed={10}
+  angle={-45}
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+### 3. BackgroundParticles
+
+Canvas-based floating particles.
+
+```tsx
+<BackgroundParticles
+  density={50}
+  color="#ffffff"
+  speed={0.5}
+  position="fixed"
+  zIndex={-1}
+/>
+```
+
+### 4. BackgroundStars
+
+Twinkling stars effect.
+
+```tsx
+<BackgroundStars
+  starCount={100}
+  starColor="#ffffff"
+  twinkleSpeed={0.02}
+  position="fixed"
+  zIndex={-1}
+/>
+```
+
+### 5. BackgroundDots
+
+Dot pattern background.
+
+```tsx
+<BackgroundDots
+  dotSize={2}
+  dotColor="#888888"
+  gap={30}
+  opacity={0.5}
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+### 6. BackgroundMatrix
+
+Matrix-style falling characters.
+
+```tsx
+<BackgroundMatrix
+  color="#00ff00"
+  fontSize={16}
+  speed={50}
+  position="fixed"
+  zIndex={-1}
+/>
+```
+
+### 7. BackgroundWaves
+
+Animated wave effect.
+
+```tsx
+<BackgroundWaves
+  waveColor="#667eea"
+  waveOpacity={0.3}
+  waveCount={3}
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+### 8. BackgroundRipple
+
+Expanding ripple circles from center.
+
+```tsx
+<BackgroundRipple
+  color="#667eea"
+  rippleCount={3}
+  duration={4}
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+### 9. BackgroundHexagons ⭐ NEW
+
+Animated hexagonal pattern with pulsing effect.
+
+```tsx
+<BackgroundHexagons
+  hexColor="#667eea"
+  hexSize={50}
+  animationSpeed={3}
+  position="absolute"
+  zIndex={-1}
+/>
+```
+
+### 10. BackgroundMesh ⭐ NEW
+
+Smooth animated mesh gradient with flowing colors.
+
+```tsx
+<BackgroundMesh
+  colors={["#667eea", "#764ba2", "#f093fb", "#4facfe"]}
+  speed={0.5}
+  complexity={3}
+  position="fixed"
+  zIndex={-1}
+/>
+```
+
+## Cursor Effects (10 Total)
+
+All cursors support:
+
+- `container?: HTMLElement | null` - Default: `null` (global)
+
+### 1. CursorGlow
+
+Smooth glowing circle that follows the cursor.
+
+```tsx
+<CursorGlow
+  color="#00ffff"
+  size={20}
+  smoothness={0.15}
+  container={null} // Global
+/>
+```
+
+### 2. CursorTrail
+
+Trailing dots following cursor movement.
+
+```tsx
+<CursorTrail color="#ff00ff" size={8} trailLength={8} />
+```
+
+### 3. CursorDotRing
+
+Center dot with lagging outer ring.
+
+```tsx
+<CursorDotRing dotSize={8} ringSize={32} color="#ffffff" />
+```
+
+### 4. CursorSpotlight
+
+Large spotlight effect following cursor.
+
+```tsx
+<CursorSpotlight size={200} color="#ffffff" blur={100} opacity={0.3} />
+```
+
+### 5. CursorRipple
+
+Ripple effect on click.
+
+```tsx
+<CursorRipple color="#ff00ff" size={100} duration={800} />
+```
+
+### 6. CursorBubble ✅ FIXED
+
+Bubbles appear on mouse movement.
+
+```tsx
+<CursorBubble
+  color="#00ffff"
+  minSize={10}
+  maxSize={30}
+  lifetime={1000}
+  frequency={50}
+/>
+```
+
+### 7. CursorMagnetic
+
+Cursor attracted to magnetic elements.
+
+```tsx
+<CursorMagnetic size={40} color="#ff6b6b" strength={0.3} />
+```
+
+Add `data-magnetic` attribute to elements to make them magnetic.
+
+### 8. CursorParticles
+
+Particle trail following cursor.
+
+```tsx
+<CursorParticles color="#ffff00" particleCount={5} spread={2} lifetime={60} />
+```
+
+### 9. CursorFollower ⭐ NEW
+
+Professional dot and circle follower.
+
+```tsx
+<CursorFollower
+  dotColor="#ffffff"
+  circleColor="#00ffff"
+  dotSize={6}
+  circleSize={40}
+  circleDelay={0.08}
+/>
+```
+
+### 10. CursorNeon ⭐ NEW
+
+Neon glow cursor with screen blend mode.
+
+```tsx
+<CursorNeon color="#00ffff" size={30} glowIntensity={20} smoothness={0.12} />
+```
+
+## Advanced Usage
+
+### Position Control for Backgrounds
+
+#### Fixed Position (Full Page)
+
+```tsx
+<BackgroundMesh position="fixed" zIndex={-1} />
+```
+
+- Covers entire viewport
+- Stays in place when scrolling
+- No parent positioning required
+
+#### Absolute Position (Section-Specific)
+
+```tsx
+<section style={{ position: "relative", height: "100vh" }}>
+  <BackgroundGrid position="absolute" zIndex={-1} />
+  <Content />
+</section>
+```
+
+- Contained within parent element
+- Requires `position: relative` on parent
+- Different backgrounds per section
+
+### Container Control for Cursors
+
+#### Global Cursor (Default)
+
+```tsx
+<CursorFollower />
+```
+
+- Works across entire website
+- Follows cursor everywhere
+
+#### Scoped Cursor
+
+```tsx
+const ref = useRef<HTMLDivElement>(null);
+
+<div ref={ref} style={{ position: "relative" }}>
+  <CursorGlow container={ref.current} />
+  <Content />
+</div>;
+```
+
+- Limited to specific section
+- Different cursors per section
+- Requires ref and `position: relative`
+
+### Layering Multiple Backgrounds
+
+```tsx
+<div style={{ position: "relative", height: "100vh" }}>
+  <BackgroundMesh position="absolute" zIndex={-3} />
+  <BackgroundGrid position="absolute" zIndex={-2} opacity={0.3} />
+  <BackgroundDots position="absolute" zIndex={-1} opacity={0.2} />
+  <Content />
+</div>
+```
+
+### Different Effects per Section
+
+```tsx
 function App() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
-      <BackgroundGrid cellSize={40} opacity={0.5} zIndex={-1} />
-      <h1>Your content here</h1>
-    </div>
+    <>
+      {/* Hero section */}
+      <section ref={heroRef} style={{ position: "relative", height: "100vh" }}>
+        <CursorNeon container={heroRef.current} />
+        <BackgroundMesh position="absolute" zIndex={-1} />
+        <Hero />
+      </section>
+
+      {/* Gallery section */}
+      <section
+        ref={galleryRef}
+        style={{ position: "relative", height: "100vh" }}
+      >
+        <CursorMagnetic container={galleryRef.current} />
+        <BackgroundHexagons position="absolute" zIndex={-1} />
+        <Gallery />
+      </section>
+    </>
   );
 }
 ```
 
-## API Reference
-
-### Cursor Effects (10 Total)
-
-#### CursorGlow
-
-Smooth glowing circle that follows the cursor.
-
-- `color?: string` - Glow color (default: `"#00ffff"`)
-- `size?: number` - Size in pixels (default: `20`)
-- `smoothness?: number` - Smoothness 0-1 (default: `0.15`)
-
-#### CursorTrail
-
-Trailing dots following cursor movement.
-
-- `color?: string` - Trail color (default: `"#ff00ff"`)
-- `size?: number` - Dot size (default: `8`)
-- `trailLength?: number` - Number of dots (default: `8`)
-
-#### CursorDotRing
-
-Center dot with lagging outer ring.
-
-- `dotSize?: number` - Center dot size (default: `8`)
-- `ringSize?: number` - Outer ring size (default: `32`)
-- `color?: string` - Color (default: `"#ffffff"`)
-
-#### CursorSpotlight
-
-Large spotlight effect following cursor.
-
-- `size?: number` - Spotlight size (default: `200`)
-- `color?: string` - Spotlight color (default: `"#ffffff"`)
-- `blur?: number` - Blur amount (default: `100`)
-- `opacity?: number` - Opacity 0-1 (default: `0.3`)
-
-#### CursorRipple
-
-Ripple effect on click.
-
-- `color?: string` - Ripple color (default: `"#ff00ff"`)
-- `size?: number` - Max ripple size (default: `100`)
-- `duration?: number` - Animation duration ms (default: `800`)
-
-#### CursorBubble
-
-Bubbles appear on mouse movement.
-
-- `color?: string` - Bubble color (default: `"#00ffff"`)
-- `minSize?: number` - Min bubble size (default: `10`)
-- `maxSize?: number` - Max bubble size (default: `30`)
-- `lifetime?: number` - Bubble lifetime ms (default: `1000`)
-- `frequency?: number` - Spawn frequency ms (default: `50`)
-
-#### CursorMagnetic
-
-Cursor attracted to magnetic elements.
-
-- `size?: number` - Cursor size (default: `40`)
-- `color?: string` - Cursor color (default: `"#ff6b6b"`)
-- `strength?: number` - Magnetic strength 0-1 (default: `0.3`)
-
-Add `data-magnetic` attribute to elements to make them magnetic.
-
-#### CursorParticles
-
-Particle trail following cursor.
-
-- `color?: string` - Particle color (default: `"#ffff00"`)
-- `particleCount?: number` - Particles per frame (default: `5`)
-- `particleSize?: number` - Particle size (default: `4`)
-- `spread?: number` - Spread amount (default: `2`)
-- `lifetime?: number` - Particle lifetime frames (default: `60`)
-
-#### CursorFollower ⭐ NEW
-
-Professional dot and circle follower.
-
-- `dotColor?: string` - Dot color (default: `"#ffffff"`)
-- `circleColor?: string` - Circle color (default: `"#ffffff"`)
-- `dotSize?: number` - Dot size (default: `6`)
-- `circleSize?: number` - Circle size (default: `40`)
-- `circleDelay?: number` - Circle lag amount (default: `0.08`)
-
-#### CursorNeon ⭐ NEW
-
-Neon glow cursor with screen blend mode.
-
-- `color?: string` - Neon color (default: `"#00ffff"`)
-- `size?: number` - Cursor size (default: `30`)
-- `glowIntensity?: number` - Glow strength (default: `20`)
-- `smoothness?: number` - Movement smoothness (default: `0.12`)
-
-### Background Effects (10 Total)
-
-All backgrounds support `zIndex` prop (default: `-1`) for layering control.
-
-#### BackgroundGrid
-
-CSS grid pattern background.
-
-- `cellSize?: number` - Grid cell size (default: `40`)
-- `lineColor?: string` - Grid line color (default: `"#333333"`)
-- `opacity?: number` - Grid opacity (default: `0.5`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundGradient
-
-Animated gradient background.
-
-- `colors?: string[]` - Gradient colors (default: `["#667eea", "#764ba2", "#f093fb"]`)
-- `speed?: number` - Animation speed seconds (default: `10`)
-- `angle?: number` - Gradient angle (default: `-45`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundParticles
-
-Canvas-based floating particles.
-
-- `density?: number` - Number of particles (default: `50`)
-- `color?: string` - Particle color (default: `"#ffffff"`)
-- `speed?: number` - Movement speed (default: `0.5`)
-- `minSize?: number` - Min particle size (default: `1`)
-- `maxSize?: number` - Max particle size (default: `3`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundStars
-
-Twinkling stars effect.
-
-- `starCount?: number` - Number of stars (default: `100`)
-- `starColor?: string` - Star color (default: `"#ffffff"`)
-- `twinkleSpeed?: number` - Twinkle speed (default: `0.02`)
-- `minSize?: number` - Min star size (default: `1`)
-- `maxSize?: number` - Max star size (default: `3`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundDots
-
-Dot pattern background.
-
-- `dotSize?: number` - Dot size (default: `2`)
-- `dotColor?: string` - Dot color (default: `"#888888"`)
-- `gap?: number` - Gap between dots (default: `30`)
-- `opacity?: number` - Dot opacity (default: `0.5`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundMatrix
-
-Matrix-style falling characters.
-
-- `color?: string` - Character color (default: `"#00ff00"`)
-- `fontSize?: number` - Font size (default: `16`)
-- `speed?: number` - Fall speed ms (default: `50`)
-- `density?: number` - Character density 0-1 (default: `0.95`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundWaves
-
-Animated wave effect.
-
-- `waveColor?: string` - Wave color (default: `"#667eea"`)
-- `waveOpacity?: number` - Wave opacity (default: `0.3`)
-- `waveCount?: number` - Number of waves (default: `3`)
-- `speed?: number` - Animation speed seconds (default: `5`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundRipple
-
-Expanding ripple circles from center.
-
-- `color?: string` - Ripple color (default: `"#667eea"`)
-- `rippleCount?: number` - Number of ripples (default: `3`)
-- `duration?: number` - Animation duration seconds (default: `4`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundHexagons ⭐ NEW
-
-Animated hexagonal pattern with pulsing effect.
-
-- `hexColor?: string` - Hexagon color (default: `"#667eea"`)
-- `hexSize?: number` - Hexagon size (default: `50`)
-- `gap?: number` - Gap between hexagons (default: `10`)
-- `opacity?: number` - Opacity (default: `0.3`)
-- `animationSpeed?: number` - Pulse speed (default: `3`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-#### BackgroundMesh ⭐ NEW
-
-Smooth animated mesh gradient with flowing colors.
-
-- `colors?: string[]` - Mesh colors (default: `["#667eea", "#764ba2", "#f093fb", "#4facfe"]`)
-- `speed?: number` - Animation speed (default: `0.5`)
-- `complexity?: number` - Mesh complexity (default: `3`)
-- `zIndex?: number` - Z-index (default: `-1`)
-- `className?: string` - Additional CSS class
-
-## Advanced Usage
-
-### Layering with z-index
-
-```tsx
-<div style={{ position: "relative", height: "100vh" }}>
-  <BackgroundMesh zIndex={-3} />
-  <BackgroundGrid zIndex={-2} opacity={0.3} />
-  <BackgroundDots zIndex={-1} opacity={0.2} />
-  <YourContent />
-</div>
-```
-
-### Tree-shaking
+## Tree-shaking
 
 Import only what you need:
 
 ```tsx
-import { CursorGlow } from "react-effects/cursor";
-import { BackgroundGrid } from "react-effects/background";
+import { CursorFollower } from "react-effects/cursor";
+import { BackgroundMesh } from "react-effects/background";
 ```
 
-### Next.js Usage
+## Next.js Usage
 
 ```tsx
 "use client"; // For Next.js 13+ App Router
 
-import { CursorFollower, BackgroundMesh } from "react-effects";
+import { CursorNeon, BackgroundMesh } from "react-effects";
 
 export default function Page() {
   return (
     <>
-      <CursorFollower />
+      <CursorNeon />
       <div style={{ position: "relative", minHeight: "100vh" }}>
-        <BackgroundMesh />
+        <BackgroundMesh position="absolute" zIndex={-1} />
         <main>Your content</main>
       </div>
     </>
   );
 }
 ```
+
+## Documentation
+
+- **USAGE_GUIDE.md** - Complete usage examples
+- **POSITION_CONTAINER_GUIDE.md** - Position & container control
+- **FEATURES.md** - All features with examples
+- **QUICKSTART.md** - Quick start guide
 
 ## License
 

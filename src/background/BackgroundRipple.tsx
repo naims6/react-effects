@@ -5,6 +5,7 @@ export interface BackgroundRippleProps {
   rippleCount?: number;
   duration?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export const BackgroundRipple: React.FC<BackgroundRippleProps> = ({
   rippleCount = 3,
   duration = 4,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -63,7 +65,7 @@ export const BackgroundRipple: React.FC<BackgroundRippleProps> = ({
       ref={divRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

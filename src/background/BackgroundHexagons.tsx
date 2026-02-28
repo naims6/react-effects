@@ -7,6 +7,7 @@ export interface BackgroundHexagonsProps {
   opacity?: number;
   animationSpeed?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -24,6 +25,7 @@ export const BackgroundHexagons: React.FC<BackgroundHexagonsProps> = ({
   opacity = 0.3,
   animationSpeed = 3,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -120,7 +122,7 @@ export const BackgroundHexagons: React.FC<BackgroundHexagonsProps> = ({
       ref={containerRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

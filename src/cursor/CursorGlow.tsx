@@ -4,12 +4,14 @@ export interface CursorGlowProps {
   color?: string;
   size?: number;
   smoothness?: number;
+  container?: HTMLElement | null;
 }
 
 export const CursorGlow: React.FC<CursorGlowProps> = ({
   color = "#00ffff",
   size = 20,
   smoothness = 0.15,
+  container = null,
 }) => {
   const glowRef = useRef<HTMLDivElement>(null);
   const positionRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
@@ -18,9 +20,18 @@ export const CursorGlow: React.FC<CursorGlowProps> = ({
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const target = container || window;
+    const isWindow = target === window;
+
     const handleMouseMove = (e: MouseEvent) => {
-      positionRef.current.targetX = e.clientX;
-      positionRef.current.targetY = e.clientY;
+      if (isWindow) {
+        positionRef.current.targetX = e.clientX;
+        positionRef.current.targetY = e.clientY;
+      } else {
+        const rect = (target as HTMLElement).getBoundingClientRect();
+        positionRef.current.targetX = e.clientX - rect.left;
+        positionRef.current.targetY = e.clientY - rect.top;
+      }
     };
 
     const animate = () => {
@@ -37,16 +48,16 @@ export const CursorGlow: React.FC<CursorGlowProps> = ({
       rafRef.current = requestAnimationFrame(animate);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    target.addEventListener("mousemove", handleMouseMove as EventListener);
     rafRef.current = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      target.removeEventListener("mousemove", handleMouseMove as EventListener);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [size, smoothness]);
+  }, [size, smoothness, container]);
 
   if (typeof window === "undefined") return null;
 
@@ -54,7 +65,7 @@ export const CursorGlow: React.FC<CursorGlowProps> = ({
     <div
       ref={glowRef}
       style={{
-        position: "fixed",
+        position: container ? "absolute" : "fixed",
         top: 0,
         left: 0,
         width: `${size}px`,

@@ -4,6 +4,7 @@ export interface BackgroundDotsProps {
   gap?: number;
   opacity?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export const BackgroundDots: React.FC<BackgroundDotsProps> = ({
   gap = 30,
   opacity = 0.5,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   if (typeof window === "undefined") return null;
@@ -21,7 +23,7 @@ export const BackgroundDots: React.FC<BackgroundDotsProps> = ({
     <div
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

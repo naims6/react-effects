@@ -5,6 +5,7 @@ export interface BackgroundMeshProps {
   speed?: number;
   complexity?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -13,6 +14,7 @@ export const BackgroundMesh: React.FC<BackgroundMeshProps> = ({
   speed = 0.5,
   complexity = 3,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -111,7 +113,7 @@ export const BackgroundMesh: React.FC<BackgroundMeshProps> = ({
       ref={containerRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",

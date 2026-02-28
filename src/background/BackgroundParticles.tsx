@@ -7,6 +7,7 @@ export interface BackgroundParticlesProps {
   minSize?: number;
   maxSize?: number;
   zIndex?: number;
+  position?: "absolute" | "fixed";
   className?: string;
 }
 
@@ -25,6 +26,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
   minSize = 1,
   maxSize = 3,
   zIndex = -1,
+  position = "absolute",
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -102,7 +104,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
       ref={containerRef}
       className={className}
       style={{
-        position: "absolute",
+        position,
         top: 0,
         left: 0,
         width: "100%",
