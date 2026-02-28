@@ -3,12 +3,19 @@ import { useEffect, useRef } from "react";
 export interface BackgroundGradientProps {
   colors?: string[];
   speed?: number;
+  angle?: number;
+  zIndex?: number;
+  className?: string;
 }
 
 export const BackgroundGradient: React.FC<BackgroundGradientProps> = ({
   colors = ["#667eea", "#764ba2", "#f093fb"],
   speed = 10,
+  angle = -45,
+  zIndex = -1,
+  className = "",
 }) => {
+  const divRef = useRef<HTMLDivElement>(null);
   const styleRef = useRef<HTMLStyleElement | null>(null);
 
   useEffect(() => {
@@ -27,9 +34,8 @@ export const BackgroundGradient: React.FC<BackgroundGradientProps> = ({
     document.head.appendChild(style);
     styleRef.current = style;
 
-    const div = document.getElementById("bg-gradient");
-    if (div) {
-      div.style.animation = `${keyframeName} ${speed}s ease infinite`;
+    if (divRef.current) {
+      divRef.current.style.animation = `${keyframeName} ${speed}s ease infinite`;
     }
 
     return () => {
@@ -45,17 +51,18 @@ export const BackgroundGradient: React.FC<BackgroundGradientProps> = ({
 
   return (
     <div
-      id="bg-gradient"
+      ref={divRef}
+      className={className}
       style={{
-        position: "fixed",
+        position: "absolute",
         top: 0,
         left: 0,
         width: "100%",
         height: "100%",
-        background: `linear-gradient(-45deg, ${gradientColors})`,
+        background: `linear-gradient(${angle}deg, ${gradientColors})`,
         backgroundSize: "400% 400%",
+        zIndex,
         pointerEvents: "none",
-        zIndex: -1,
       }}
     />
   );

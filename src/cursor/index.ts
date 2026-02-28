@@ -1,3 +1,10 @@
 export { CursorGlow, type CursorGlowProps } from "./CursorGlow";
 export { CursorTrail, type CursorTrailProps } from "./CursorTrail";
 export { CursorDotRing, type CursorDotRingProps } from "./CursorDotRing";
+export { CursorSpotlight, type CursorSpotlightProps } from "./CursorSpotlight";
+export { CursorRipple, type CursorRippleProps } from "./CursorRipple";
+export { CursorBubble, type CursorBubbleProps } from "./CursorBubble";
+export { CursorMagnetic, type CursorMagneticProps } from "./CursorMagnetic";
+export { CursorParticles, type CursorParticlesProps } from "./CursorParticles";
+export { CursorFollower, type CursorFollowerProps } from "./CursorFollower";
+export { CursorNeon, type CursorNeonProps } from "./CursorNeon";

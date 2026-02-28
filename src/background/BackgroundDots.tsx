@@ -1,14 +1,16 @@
-export interface BackgroundGridProps {
-  cellSize?: number;
-  lineColor?: string;
+export interface BackgroundDotsProps {
+  dotSize?: number;
+  dotColor?: string;
+  gap?: number;
   opacity?: number;
   zIndex?: number;
   className?: string;
 }
 
-export const BackgroundGrid: React.FC<BackgroundGridProps> = ({
-  cellSize = 40,
-  lineColor = "#333333",
+export const BackgroundDots: React.FC<BackgroundDotsProps> = ({
+  dotSize = 2,
+  dotColor = "#888888",
+  gap = 30,
   opacity = 0.5,
   zIndex = -1,
   className = "",
@@ -24,11 +26,8 @@ export const BackgroundGrid: React.FC<BackgroundGridProps> = ({
         left: 0,
         width: "100%",
         height: "100%",
-        backgroundImage: `
-          linear-gradient(${lineColor} 1px, transparent 1px),
-          linear-gradient(90deg, ${lineColor} 1px, transparent 1px)
-        `,
-        backgroundSize: `${cellSize}px ${cellSize}px`,
+        backgroundImage: `radial-gradient(circle, ${dotColor} ${dotSize}px, transparent ${dotSize}px)`,
+        backgroundSize: `${gap}px ${gap}px`,
         opacity,
         zIndex,
         pointerEvents: "none",

@@ -1,35 +1,24 @@
 import { useEffect, useRef } from "react";
 
-export interface BackgroundParticlesProps {
-  density?: number;
+export interface BackgroundMatrixProps {
   color?: string;
+  fontSize?: number;
   speed?: number;
-  minSize?: number;
-  maxSize?: number;
+  density?: number;
   zIndex?: number;
   className?: string;
 }
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-}
-
-export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
-  density = 50,
-  color = "#ffffff",
-  speed = 0.5,
-  minSize = 1,
-  maxSize = 3,
+export const BackgroundMatrix: React.FC<BackgroundMatrixProps> = ({
+  color = "#00ff00",
+  fontSize = 16,
+  speed = 50,
+  density = 0.95,
   zIndex = -1,
   className = "",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number>();
 
   useEffect(() => {
@@ -42,42 +31,40 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
+    let columns: number[] = [];
+    let drops: number[] = [];
+
     const resize = () => {
       const rect = container.getBoundingClientRect();
       canvas.width = rect.width;
       canvas.height = rect.height;
-      initParticles();
+
+      columns = Array(Math.floor(canvas.width / fontSize)).fill(0);
+      drops = columns.map(() => Math.random() * -100);
     };
 
-    const initParticles = () => {
-      particlesRef.current = [];
-      for (let i = 0; i < density; i++) {
-        particlesRef.current.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * speed,
-          vy: (Math.random() - 0.5) * speed,
-          radius: Math.random() * (maxSize - minSize) + minSize,
-        });
-      }
+    const draw = () => {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = color;
+      ctx.font = `${fontSize}px monospace`;
+
+      drops.forEach((y, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        const x = i * fontSize;
+        ctx.fillText(text, x, y * fontSize);
+
+        if (y * fontSize > canvas.height && Math.random() > density) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      });
     };
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = color;
-
-      particlesRef.current.forEach((particle) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
+      draw();
       rafRef.current = requestAnimationFrame(animate);
     };
 
@@ -85,15 +72,16 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
     resizeObserver.observe(container);
 
     resize();
-    rafRef.current = requestAnimationFrame(animate);
+    const interval = setInterval(draw, speed);
 
     return () => {
       resizeObserver.disconnect();
+      clearInterval(interval);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [density, color, speed, minSize, maxSize]);
+  }, [color, fontSize, speed, density]);
 
   if (typeof window === "undefined") return null;
 
@@ -107,6 +95,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
         left: 0,
         width: "100%",
         height: "100%",
+        backgroundColor: "#000",
         zIndex,
         pointerEvents: "none",
       }}

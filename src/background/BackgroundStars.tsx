@@ -1,27 +1,28 @@
 import { useEffect, useRef } from "react";
 
-export interface BackgroundParticlesProps {
-  density?: number;
-  color?: string;
-  speed?: number;
+export interface BackgroundStarsProps {
+  starCount?: number;
+  starColor?: string;
+  twinkleSpeed?: number;
   minSize?: number;
   maxSize?: number;
   zIndex?: number;
   className?: string;
 }
 
-interface Particle {
+interface Star {
   x: number;
   y: number;
-  vx: number;
-  vy: number;
   radius: number;
+  opacity: number;
+  twinkleSpeed: number;
+  twinkleDirection: number;
 }
 
-export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
-  density = 50,
-  color = "#ffffff",
-  speed = 0.5,
+export const BackgroundStars: React.FC<BackgroundStarsProps> = ({
+  starCount = 100,
+  starColor = "#ffffff",
+  twinkleSpeed = 0.02,
   minSize = 1,
   maxSize = 3,
   zIndex = -1,
@@ -29,7 +30,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
+  const starsRef = useRef<Star[]>([]);
   const rafRef = useRef<number>();
 
   useEffect(() => {
@@ -46,38 +47,41 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
       const rect = container.getBoundingClientRect();
       canvas.width = rect.width;
       canvas.height = rect.height;
-      initParticles();
+      initStars();
     };
 
-    const initParticles = () => {
-      particlesRef.current = [];
-      for (let i = 0; i < density; i++) {
-        particlesRef.current.push({
+    const initStars = () => {
+      starsRef.current = [];
+      for (let i = 0; i < starCount; i++) {
+        starsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * speed,
-          vy: (Math.random() - 0.5) * speed,
           radius: Math.random() * (maxSize - minSize) + minSize,
+          opacity: Math.random(),
+          twinkleSpeed: Math.random() * twinkleSpeed + twinkleSpeed / 2,
+          twinkleDirection: Math.random() > 0.5 ? 1 : -1,
         });
       }
     };
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = color;
 
-      particlesRef.current.forEach((particle) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
+      starsRef.current.forEach((star) => {
+        star.opacity += star.twinkleSpeed * star.twinkleDirection;
 
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+        if (star.opacity <= 0 || star.opacity >= 1) {
+          star.twinkleDirection *= -1;
+        }
 
+        ctx.fillStyle = starColor;
+        ctx.globalAlpha = star.opacity;
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fill();
       });
 
+      ctx.globalAlpha = 1;
       rafRef.current = requestAnimationFrame(animate);
     };
 
@@ -93,7 +97,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [density, color, speed, minSize, maxSize]);
+  }, [starCount, starColor, twinkleSpeed, minSize, maxSize]);
 
   if (typeof window === "undefined") return null;
 
@@ -107,6 +111,7 @@ export const BackgroundParticles: React.FC<BackgroundParticlesProps> = ({
         left: 0,
         width: "100%",
         height: "100%",
+        backgroundColor: "#000",
         zIndex,
         pointerEvents: "none",
       }}
