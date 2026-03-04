@@ -1,6 +1,6 @@
 # react-effects
 
-Production-ready React component library for reusable visual effects. Lightweight, tree-shakable, and SSR-safe.
+Production-ready React component library for reusable visual effects. Lightweight, tree-shakable, and SSR-safe with built-in Next.js support.
 
 ## Features
 
@@ -9,7 +9,7 @@ Production-ready React component library for reusable visual effects. Lightweigh
 - 📦 Tree-shakable exports
 - 🔒 TypeScript support
 - ⚡ Lightweight and performant
-- 🚀 Next.js compatible (SSR safe)
+- 🚀 **Next.js App Router ready** - `"use client"` included
 - 🎨 Fully customizable via props
 - 📍 Flexible positioning (absolute/fixed)
 - 🎚️ Configurable z-index for layering
@@ -24,7 +24,24 @@ npm install react-effects
 
 ## Quick Start
 
-### Basic Usage
+### Next.js (App Router 13+)
+
+```tsx
+// app/page.tsx - No "use client" needed!
+import { CursorFollower, BackgroundMesh } from "react-effects";
+
+export default function Page() {
+  return (
+    <>
+      <CursorFollower />
+      <BackgroundMesh position="fixed" zIndex={-1} />
+      <YourContent />
+    </>
+  );
+}
+```
+
+### React / Vite / CRA
 
 ```tsx
 import { CursorFollower, BackgroundMesh } from "react-effects";
@@ -43,77 +60,30 @@ function App() {
 ### With Tailwind CSS
 
 ```tsx
-import { CursorFollower, BackgroundMesh } from "react-effects";
+<CursorFollower className="hidden md:block mix-blend-difference" />
 
-function App() {
-  return (
-    <>
-      <CursorFollower className="mix-blend-difference" />
-      <BackgroundMesh
-        className="opacity-80 dark:opacity-50"
-        position="fixed"
-        zIndex={-1}
-      />
-      <YourContent />
-    </>
-  );
-}
-```
-
-## Tailwind CSS Integration
-
-All 20 components support the `className` prop for seamless Tailwind CSS integration!
-
-### Examples
-
-#### Responsive Visibility
-
-```tsx
-<CursorFollower className="hidden md:block" />
-<BackgroundMesh className="block md:hidden" position="fixed" />
-```
-
-#### Dark Mode
-
-```tsx
-<BackgroundGrid
-  className="opacity-50 dark:opacity-30"
-  position="absolute"
-  zIndex={-1}
-/>
-```
-
-#### Hover Effects
-
-```tsx
-<div className="group relative">
-  <BackgroundGradient
-    className="opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-    position="absolute"
-    zIndex={-1}
-  />
-  <Content />
-</div>
-```
-
-#### Animations
-
-```tsx
-<CursorGlow className="animate-pulse" />
-<BackgroundParticles className="animate-fade-in" position="fixed" />
-```
-
-#### Blur & Opacity
-
-```tsx
 <BackgroundMesh
-  className="opacity-80 blur-sm"
-  position="absolute"
+  className="opacity-80 dark:opacity-50"
+  position="fixed"
   zIndex={-1}
 />
 ```
 
-See **TAILWIND_GUIDE.md** for complete Tailwind CSS integration examples.
+## Why It Works with Next.js
+
+All components include `"use client"` directive, so they work seamlessly with Next.js App Router:
+
+```tsx
+"use client"; // ✅ Built into every component
+
+import { useEffect, useRef } from "react";
+
+export const CursorFollower = () => {
+  // Your component code...
+};
+```
+
+**No need to wrap components yourself!** Just import and use.
 
 ## Background Effects (10 Total)
 
@@ -228,7 +198,7 @@ All backgrounds support:
 />
 ```
 
-### 9. BackgroundHexagons ⭐ NEW
+### 9. BackgroundHexagons ⭐
 
 ```tsx
 <BackgroundHexagons
@@ -241,7 +211,7 @@ All backgrounds support:
 />
 ```
 
-### 10. BackgroundMesh ⭐ NEW
+### 10. BackgroundMesh ⭐
 
 ```tsx
 <BackgroundMesh
@@ -268,7 +238,6 @@ All cursors support:
   color="#00ffff"
   size={20}
   smoothness={0.15}
-  container={null}
   className="mix-blend-screen"
 />
 ```
@@ -313,7 +282,7 @@ All cursors support:
 />
 ```
 
-### 6. CursorBubble ✅ FIXED
+### 6. CursorBubble
 
 ```tsx
 <CursorBubble
@@ -349,7 +318,7 @@ All cursors support:
 />
 ```
 
-### 9. CursorFollower ⭐ NEW
+### 9. CursorFollower ⭐
 
 ```tsx
 <CursorFollower
@@ -362,7 +331,7 @@ All cursors support:
 />
 ```
 
-### 10. CursorNeon ⭐ NEW
+### 10. CursorNeon ⭐
 
 ```tsx
 <CursorNeon
@@ -374,141 +343,107 @@ All cursors support:
 />
 ```
 
-## Advanced Usage
+## Next.js Examples
 
-### Position Control for Backgrounds
-
-#### Fixed Position (Full Page)
+### App Router Layout
 
 ```tsx
-<BackgroundMesh position="fixed" zIndex={-1} className="opacity-80" />
+// app/layout.tsx
+import { CursorFollower } from "react-effects";
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <CursorFollower className="hidden md:block" />
+        {children}
+      </body>
+    </html>
+  );
+}
 ```
 
-#### Absolute Position (Section-Specific)
+### Multi-Section Page
 
 ```tsx
+// app/page.tsx
+import { BackgroundMesh, BackgroundGrid } from "react-effects";
+
+export default function Home() {
+  return (
+    <>
+      <section className="relative h-screen">
+        <BackgroundMesh position="absolute" zIndex={-1} />
+        <Hero />
+      </section>
+
+      <section className="relative h-screen">
+        <BackgroundGrid position="absolute" zIndex={-1} />
+        <Features />
+      </section>
+    </>
+  );
+}
+```
+
+## Advanced Usage
+
+### Position Control
+
+```tsx
+// Fixed - covers entire viewport
+<BackgroundMesh position="fixed" zIndex={-1} />
+
+// Absolute - contained within parent
 <section className="relative h-screen">
-  <BackgroundGrid
-    position="absolute"
-    zIndex={-1}
-    className="opacity-50 dark:opacity-30"
-  />
-  <Content />
+  <BackgroundGrid position="absolute" zIndex={-1} />
 </section>
 ```
 
-### Container Control for Cursors
-
-#### Global Cursor (Default)
+### Container Control
 
 ```tsx
-<CursorFollower className="hidden md:block" />
-```
+// Global cursor
+<CursorFollower />;
 
-#### Scoped Cursor
-
-```tsx
+// Scoped cursor
 const ref = useRef<HTMLDivElement>(null);
-
 <div ref={ref} className="relative">
-  <CursorGlow container={ref.current} className="mix-blend-difference" />
-  <Content />
+  <CursorGlow container={ref.current} />
 </div>;
 ```
 
-### Tailwind CSS Examples
-
-#### Responsive Design
+### Tailwind CSS
 
 ```tsx
-<>
-  {/* Simple on mobile */}
-  <BackgroundGrid className="block md:hidden opacity-30" position="fixed" />
+// Responsive
+<CursorFollower className="hidden md:block" />
 
-  {/* Complex on desktop */}
-  <BackgroundMesh className="hidden md:block opacity-80" position="fixed" />
+// Dark mode
+<BackgroundGrid className="opacity-50 dark:opacity-30" />
 
-  {/* No cursor on mobile */}
-  <CursorFollower className="hidden md:block" />
-</>
-```
-
-#### Dark Mode
-
-```tsx
-<BackgroundGrid
-  className="opacity-50 dark:opacity-30"
-  lineColor="#333"
-  position="absolute"
-  zIndex={-1}
-/>
-```
-
-#### Hover Effects
-
-```tsx
-<div className="group relative">
+// Hover effects
+<div className="group">
   <BackgroundGradient
-    className="opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-    position="absolute"
-    zIndex={-1}
+    className="opacity-0 group-hover:opacity-100 transition-opacity"
   />
-  <Content />
-</div>
-```
-
-#### Layered with Tailwind
-
-```tsx
-<div className="relative h-screen">
-  <BackgroundMesh className="opacity-80 z-[-3]" position="absolute" />
-  <BackgroundGrid className="opacity-30 z-[-2]" position="absolute" />
-  <BackgroundDots className="opacity-20 z-[-1]" position="absolute" />
-  <Content />
 </div>
 ```
 
 ## Tree-shaking
-
-Import only what you need:
 
 ```tsx
 import { CursorFollower } from "react-effects/cursor";
 import { BackgroundMesh } from "react-effects/background";
 ```
 
-## Next.js Usage
-
-```tsx
-"use client"; // For Next.js 13+ App Router
-
-import { CursorNeon, BackgroundMesh } from "react-effects";
-
-export default function Page() {
-  return (
-    <>
-      <CursorNeon className="hidden md:block" />
-      <div className="relative min-h-screen">
-        <BackgroundMesh
-          className="opacity-80 dark:opacity-60"
-          position="absolute"
-          zIndex={-1}
-        />
-        <main>Your content</main>
-      </div>
-    </>
-  );
-}
-```
-
 ## Documentation
 
 - **README.md** - This file
-- **TAILWIND_GUIDE.md** - Complete Tailwind CSS integration guide
-- **USAGE_GUIDE.md** - Complete usage examples
+- **NEXTJS_GUIDE.md** - Complete Next.js integration guide
+- **TAILWIND_GUIDE.md** - Tailwind CSS integration
+- **USAGE_GUIDE.md** - Usage examples
 - **POSITION_CONTAINER_GUIDE.md** - Position & container control
-- **FEATURES.md** - All features with examples
-- **QUICKSTART.md** - Quick start guide
 
 ## License
 

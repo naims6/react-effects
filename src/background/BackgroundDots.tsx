@@ -1,3 +1,5 @@
+"use client";
+
 export interface BackgroundDotsProps {
   dotSize?: number;
   dotColor?: string;

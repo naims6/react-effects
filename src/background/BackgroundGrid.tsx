@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 export interface BackgroundGridProps {
   cellSize?: number;
   lineColor?: string;
